@@ -2,7 +2,9 @@
 
 namespace AppBundle\Controller;
 
-use AppBundle\AppBundle;
+use AppBundle\Entity\Department;
+use AppBundle\Entity\User;
+use AppBundle\Entity\Semester;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Exception;
@@ -13,56 +15,105 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 
 class ControlPanelController extends Controller {
 
-    public function showAction(){	
-
-		$departments = $this->getDoctrine()->getRepository('AppBundle:Department')->findAll();
-		// Return the view to be rendered
-		return $this->render('control_panel/index.html.twig', array(
-			'departments' => $departments,
-		));
-			
-	}
-
-	public function determineCurrentStep($user){
+    public function showAction(){
 		$em = $this->getDoctrine()->getManager();
 
-		$department= $user->getFieldOfStudy()->getDepartment();
-		$semesters = $em->getRepository('AppBundle:Semester')->findAllSemestersByDepartment($department->getId());
+		$department = $this->get('security.token_storage')->getToken()->getUser()->getFieldOfStudy()->getDepartment();
+		$semester = null;
 
-		$today = new DateTime("now");
-
-		$validSemesters = array();
-
-		foreach ($semesters as $semester) {
-
-			$semesterStartDate = $semester->getAdmissionStartDate();
-			$semesterEndDate = $semester->getAdmissionEndDate();
-
-			if ($semesterStartDate < $today && $today < $semesterEndDate) {
-				$validSemesters[] = $semester;
+		try{
+			$semester = $em->getRepository('AppBundle:Semester')->findCurrentSemesterByDepartment($department->getId());
+		}catch(Exception $e){
+			if ($e instanceof \Doctrine\ORM\NoResultException OR $e instanceof \Doctrine\ORM\NonUniqueResultException) {
+				$semester = null;
+			}
+			else{
+				throw $e;
 			}
 		}
 
-		//Ingen gyldige semestre eksisterer, vi er på steg 0
-		if(empty($validSemesters)){
-			return 0;
+		$step = 0;
+		$interviewedAssistantsCount = 0;
+		$assignedInterviewsCount = 0;
+		$allocatedAssistantsCount = 0;
+		$totalAssistantsCount = 0;
+
+		if(!is_null($semester)){
+			$applicationRepository = $this->getDoctrine()->getRepository('AppBundle:Application');
+			$interviewedAssistantsCount = count($applicationRepository->findInterviewedApplicants($department,$semester));
+			$assignedInterviewsCount = count($applicationRepository->findAssignedApplicants($department,$semester));
+
+			$totalAssistantsCount = 0;
+			$allocatedAssistantsCount = 0;
+			$assistantHistoryRepository = $this->getDoctrine()->getRepository('AppBundle:AssistantHistory');
+			$assistantHistories = $assistantHistoryRepository->findAssistantHistoriesByDepartment($department);
+			foreach($assistantHistories as $history){
+				$now = new \DateTime();
+				if($history->getSemester()->getSemesterStartDate()<$now && $history->getSemester()->getSemesterEndDate() > $now){
+					$totalAssistantsCount += 1;
+					if(!is_null($history->getSchool())){
+						$allocatedAssistantsCount += 1;
+					}
+				}
+			}
+			$step = $this->determineCurrentStep($semester, $interviewedAssistantsCount, $assignedInterviewsCount, $allocatedAssistantsCount, $totalAssistantsCount);
 		}
 
-		//Kan ikke ha mer en et gyldig semester om gangen..,
-		if(count($validSemesters)>1){
-			return -1;
+		$departments = $this->getDoctrine()->getRepository('AppBundle:Department')->findAll();
+
+		// Return the view to be rendered
+		return $this->render('control_panel/index.html.twig', array(
+			'step' => $step,
+			'semester' => $semester,
+			'interviewedAssistantsCount' => $interviewedAssistantsCount,
+			'totalInterviewsCount' => $assignedInterviewsCount + $interviewedAssistantsCount,
+			'allocatedAssistantsCount' => $allocatedAssistantsCount,
+			'totalAssistantsCount' => $totalAssistantsCount,
+			'departments' => $departments,
+		));
+
+	}
+
+	public function determineCurrentStep(Semester $semester, $interviewedAssistantsCount, $assignedInterviewsCount, $allocatedAssistantsCount, $totalAssistantsCount){
+
+		$today = new DateTime("now");
+		//$today = DateTime::createFromFormat('j-m-Y', '03-06-2016'); //For testing
+
+		// Step 1 Before Admission
+		if($today < $semester->getAdmissionStartDate()&& $today > $semester->getSemesterStartDate()){
+			return 1 + ($today->format('U')-$semester->getSemesterStartDate()->format('U'))/($semester->getAdmissionStartDate()->format('U') - $semester->getSemesterStartDate()->format('U'));
 		}
 
-		$semester = $validSemesters[0];
-
-		if($semester->getSemesterStartDate()<$today && $today > $semester->getAdmissionStartDate()){
-			return 1 + ($today->format('U')-$semester->getSemesterStartDate()->format('U'))/($semester->getAdmissionStartDate()->format('U') - $semester->getSemesterStartDate()>format('U'));
+		// Step 2 Admission has started
+		if($today < $semester->getAdmissionEndDate() && $today > $semester->getAdmissionStartDate()){
+			return 2 + ($today->format('U') - $semester->getAdmissionStartDate()->format('U'))/($semester->getAdmissionEndDate()->format('U') - $semester->getAdmissionStartDate()->format('U'));
 		}
 
-		if($semester->getAdmissionEndDate()<$today && $today > $semester->getAdmissionStartDate()){
-			return 2 + ($today->format('U') - $semester->getAdmissionStartDate()->format('U'))/($semester->getAdmissionEndDate()->format('U') - $semester->getAdmissionStartDate()>format('U'));
+		// Step 3 Interviewing
+		// No interviews are assigned yet
+		if($assignedInterviewsCount == 0 && $interviewedAssistantsCount == 0){
+			return 3;
+		} // There are interviews left to conduct
+		elseif($assignedInterviewsCount>0){
+			return 3 + $interviewedAssistantsCount/($assignedInterviewsCount + $interviewedAssistantsCount);
 		}
 
+		// Step 4 Distribute to schools
+		// All interviews are conducted, but no one has been accepted yet
+		if($totalAssistantsCount == 0){
+			return 4;
+		}
+		// There are assistants left to distribute
+		if($allocatedAssistantsCount < $totalAssistantsCount){
+			return 4 + $allocatedAssistantsCount/$totalAssistantsCount;
+		}
+
+		// Step 5 Operating phase
+		if($today < $semester->getSemesterEndDate() && $today > $semester->getAdmissionEndDate()){
+			return 5 + ($today->format('U') - $semester->getAdmissionEndDate()->format('U'))/($semester->getSemesterEndDate()->format('U') - $semester->getAdmissionEndDate()->format('U'));
+		}
+
+		// Something is wrong
 		return -1;
 	}
 
