@@ -2,15 +2,11 @@
 
 namespace AppBundle\Controller;
 
-use AppBundle\Entity\Department;
-use AppBundle\Entity\User;
 use AppBundle\Entity\Semester;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Exception;
 use \DateTime;
-use AppBundle\Entity\Forum;
-use AppBundle\Form\Type\CreateForumType;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 class ControlPanelController extends Controller {
