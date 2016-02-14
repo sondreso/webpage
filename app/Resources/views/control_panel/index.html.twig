@@ -4,26 +4,70 @@
     <div class="control-panel">
         <div class="row">
             <div class="small-2 columns small-offset-1 step-box {% if step < 1 %} step-active {% endif %}">
-                <a href="{{ path('semesteradmin_show') }}">Opprett semester</a>
+                <h4>Nytt semester</h4>
+                {% if step < 1 %}
+                    <p class="sbsStyle"><a href="{{ path('semesteradmin_show') }}">Opprett semester</a></p>
+                {% else %}
+                    <p class="sbsStyle">Semesteret er underveis</p>
+                {% endif %}
+
             </div>
             <div class="small-2 columns step-box  {% if step < 3 and step >= 1 %} step-active {% endif %}">
+                <h4>Opptak</h4>
                 {% if step >= 1 and step < 3  %}
                     {% if admission_time_left < 24 %}
-                        {{ admission_time_left }} timer
+                        {% if admission_time_left == 1 %}
+                            <p class="sbsStyle">{{ admission_time_left }} time igjen!</p>
+                        {% else %}
+                            <p class="sbsStyle">{{ admission_time_left }} timer igjen</p>
+                        {% endif %}
+                    {% else %}
+                        {% if admission_time_left // 24 == 1 %}
+                            <p class="sbsStyle">{{ admission_time_left // 24 }} dag igjen</p>
+                        {% else %}
+                            <p class="sbsStyle">{{ admission_time_left // 24 }} dager igjen</p>
+                        {% endif %}
                     {% endif %}
-                    {{ admission_time_left // 24 }}
-
+                    <p class="sbsStyle">Antall søkere X</p>
+                    <p class="sbsStyle"><a href="{{ path('admissionadmin_show') }}">Nye søkere</a></p>
+                {% else %}
+                    <p class="sbsStyle">Opptaket er stengt</p>
                 {%  endif %}
+
+
             </div>
             <div class="small-2 columns step-box  {% if step < 4 and step >= 3 %} step-active {% endif %}">
-                <a href="{{ path('admissionadmin_show') }}">Fordel intervjuer</a>
-                <a href="{{ path('admissionadmin_show') }}">Fordel intervjuer</a>
+                <h4>Intervju</h4>
+                {% if step < 4 and step >= 3 %}
+                    <p class="sbsStyle">Intervjuet  {{ interviewedAssistantsCount }}/{{ totalInterviewsCount }}</p>
+
+                    <p class="sbsStyle"><a href="{{ path('admissionadmin_show') }}">Fordel intervjuer</a></p>
+
+                    <p class="sbsStyle"><a href="{{ path('admissionadmin_show', {'status':'assigned'})}}">Utfør intervju</a></p>
+
+                    <p class="sbsStyle"><a href="{{ path('teamadmin_show') }}">Opprett team-medlem</a></p>
+                {% else %}
+                    Alle intervjuer har blitt gjennomført
+                {% endif %}
+
             </div>
             <div class="small-2 columns step-box  {% if step < 5 and step >= 4 %} step-active {% endif %}">
-
+                <h4>Fordel</h4>
+                {% if step >= 4 %}
+                    <p class="sbsStyle">Fordelt {{ allocatedAssistantsCount }}/{{ totalAssistantsCount }}</p>
+                    <p class="sbsStyle"></p><a href="{{ path('schooladmin_show_users_of_department', {'id': app.user.fieldOfStudy.department.id}) }}">Fordel assistenter</a></p>
+                {% else %}
+                    <p class="sbsStyle">Det er ingen assistenter å fordele</p>
+                {% endif %}
             </div>
             <div class="small-2 columns end step-box  {% if step >= 5 %} step-active {% endif %}">
-
+                <h4>Drift</h4>
+                <p class="sbsStyle"><a href="{{ path('articleadmin_show') }}">Artikler</a></p>
+                <p class="sbsStyle"><a href="{{ path('members_show') }}">Assistenter</a></p>
+                {% if is_granted('ROLE_SUPER_ADMIN') %}
+                    <p class="sbsStyle"><a href="{{ path('surveys') }}">Undersøkelser</a></p>
+                {% endif %}
+                <p class="sbsStyle"><a href="{{ path('sponsors_edit') }}">Sponsorer</a></p>
             </div>
 
         </div>

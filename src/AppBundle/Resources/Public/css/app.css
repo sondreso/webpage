@@ -6965,13 +6965,17 @@ ul.alternatives {
 .control-panel .control-panel-item i:hover {
   color: #007095; }
 
+.control-panel .sbsStyle {
+  margin-top: 2px;
+  margin-bottom: 2px; }
+
 .control-panel .step-box {
   height: 200px;
   border: 1px solid black;
   border-radius: 10px;
   margin-right: 10px;
   text-align: center;
-  padding-top: 50px; }
+  padding-top: 25px; }
 
 .control-panel .step-active {
-  background-color: #c336cd; }
+  background-color: #6fceee; }
