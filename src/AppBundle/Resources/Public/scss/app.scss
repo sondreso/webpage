@@ -417,3 +417,36 @@ ul.alternatives {
 .float-right{
   float:right;
 }
+
+// Step-by-Step
+//-------------------------------------------
+
+.control-panel{
+  hr{
+    padding:10px;
+  }
+  .control-panel-item{
+    text-align: center;
+  }
+  h2{
+    padding:20px;
+  }
+  .control-panel-item i{
+    color:#008CBA;
+  }
+  .control-panel-item i:hover{
+    color:#007095;
+  }
+  .step-box{
+    height:200px;
+    border:1px solid black;
+    border-radius: 10px;
+    margin-right: 10px;
+    text-align: center;
+    padding-top: 50px;
+  }
+  .step-active{
+    background-color: #c336cd;
+  }
+}
+
