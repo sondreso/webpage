@@ -28,7 +28,7 @@
                             <p class="sbsStyle">{{ admission_time_left // 24 }} dager igjen</p>
                         {% endif %}
                     {% endif %}
-                    <p class="sbsStyle">Antall søkere X</p>
+                    <p class="sbsStyle">Antall søkere {{ totalApplicationsCount }}</p>
                     <p class="sbsStyle"><a href="{{ path('admissionadmin_show') }}">Nye søkere</a></p>
                 {% else %}
                     <p class="sbsStyle">Opptaket er stengt</p>
@@ -64,9 +64,7 @@
                 <h4>Drift</h4>
                 <p class="sbsStyle"><a href="{{ path('articleadmin_show') }}">Artikler</a></p>
                 <p class="sbsStyle"><a href="{{ path('members_show') }}">Assistenter</a></p>
-                {% if is_granted('ROLE_SUPER_ADMIN') %}
-                    <p class="sbsStyle"><a href="{{ path('surveys') }}">Undersøkelser</a></p>
-                {% endif %}
+                <p class="sbsStyle"><a href="{{ path('surveys') }}">Undersøkelser</a></p>
                 <p class="sbsStyle"><a href="{{ path('sponsors_edit') }}">Sponsorer</a></p>
             </div>
 
