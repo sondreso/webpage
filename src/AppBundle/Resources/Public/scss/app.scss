@@ -485,5 +485,10 @@ ul.alternatives {
   .step-active{
     background-color: $vektor-blue;
   }
+
+  .step-progressbar{
+    height: 40px;
+    background: $vektor-blue;
+  }
 }
 
