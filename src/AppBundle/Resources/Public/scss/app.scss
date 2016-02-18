@@ -492,9 +492,70 @@ ul.alternatives {
     }
   }
 
-  .step-progressbar{
-    height: 40px;
-    background: $vektor-blue;
+
+  .progressbar{
+    $step-progress-bar-ring-size : 40px;
+    $step-progress-bar-ring-width : 12px; //Må være partall
+    $step-progress-bar-border-color : #474747;
+
+    .step{
+      height: 40px;
+      padding: 0;
+      display: flex;
+      align-items: center;
+
+      .ring-container{
+        width: 40px;
+        display: inline-block;
+        .outer-ring{
+
+          width: $step-progress-bar-ring-size;
+          height: $step-progress-bar-ring-size;
+          border: 1px solid $step-progress-bar-border-color;
+          border-radius: $step-progress-bar-ring-size;
+          background-color: $vektor-blue;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+
+          .inner-ring{
+            width: $step-progress-bar-ring-size - $step-progress-bar-ring-width;
+            height: $step-progress-bar-ring-size - $step-progress-bar-ring-width;
+            border: 1px solid $step-progress-bar-border-color;
+            border-radius: $step-progress-bar-ring-size - $step-progress-bar-ring-width;
+            background-color: $vektor-white;
+          }
+        }
+
+        .no-fill{
+          background-color: $vektor-white;
+        }
+      }
+
+      .line-container{
+        width: 100%;
+        display: inline-block;
+        background-color: $vektor-white;
+        margin-left: -2px;
+        margin-right: -2px;
+        z-index: 100;
+        .line{
+          height: $step-progress-bar-ring-width;
+          width: 100%;
+          border-top: 1px solid $step-progress-bar-border-color;
+          border-bottom: 1px solid $step-progress-bar-border-color;
+
+          .fill{
+            width: 95%;
+            height: 100%;
+            background-color: $vektor-blue;
+          }
+        }
+
+      }
+
+    }
+
   }
 }
 
