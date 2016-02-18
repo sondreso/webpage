@@ -8,15 +8,15 @@
             </div>
         </div>
         <div class="row">
-            <div class="small-2 columns small-offset-1 step-box {% if step < 1 %} step-active {% else %}step-completed{% endif %}">
+            <div class="small-2 columns small-offset-1 step-box {% if step < 1 %}step-active{% else %}step-completed{% endif %}">
                 <h4>Nytt semester</h4>
                 {% if step < 1 %}
                     <p><a href="{{ path('semesteradmin_show') }}">Opprett semester</a></p>
                 {% else %}
                     <p>Semesteret er underveis</p>
                 {% endif %}
-
             </div>
+
             <div class="small-2 columns step-box {% if step < 3 and step >= 1 %}step-active{% elseif step >= 3 %}step-completed{% endif %}">
                 <h4>Opptak</h4>
                 {% if step >= 1 and step < 3  %}
@@ -33,37 +33,38 @@
                             <p>{{ admission_time_left // 24 }} dager igjen</p>
                         {% endif %}
                     {% endif %}
-                    <p>Antall søkere {{ totalApplicationsCount }}</p>
-                    <p><a href="{{ path('admissionadmin_show') }}">Nye søkere</a></p>
                 {% else %}
                     <p>Opptaket er stengt</p>
                 {%  endif %}
-
-
+                {% set totalApplicationsCount = 10 %} <!-- FJERN DENNE!!!!-->
+                <p>Antall søkere: {{ totalApplicationsCount }}</p>
+                <p><a href="{{ path('admissionadmin_show') }}">Nye søkere</a></p>
             </div>
-            <div class="small-2 columns step-box  {% if step < 4 and step >= 3 %} step-active {% endif %}">
+
+            <div class="small-2 columns step-box {% if step < 4 and step >= 3 %}step-active{% elseif step >= 4 %}step-completed{% endif %}">
                 <h4>Intervju</h4>
-                {% if step < 4 and step >= 3 %}
+                {% if step < 4 and step >= 3 and (totalInterviewsCount == 0)==false %}
                     <p>Intervjuet  {{ interviewedAssistantsCount }}/{{ totalInterviewsCount }}</p>
-
-                    <p><a href="{{ path('admissionadmin_show') }}">Fordel intervjuer</a></p>
-
-                    <p><a href="{{ path('admissionadmin_show', {'status':'assigned'})}}">Utfør intervju</a></p>
-
-                    <p><a href="{{ path('teamadmin_show') }}">Opprett team-medlem</a></p>
-                {% else %}
-                    Alle intervjuer har blitt gjennomført
+                {% elseif step >= 4 %}
+                    {{ totalInterviewsCount }} intervjuer
                 {% endif %}
+                <p><a href="{{ path('admissionadmin_show') }}">Fordel intervjuer</a></p>
 
+                <p><a href="{{ path('admissionadmin_show', {'status':'assigned'})}}">Utfør intervju</a></p>
+
+                <p><a href="{{ path('teamadmin_show') }}">Opprett team-medlem</a></p>
             </div>
-            <div class="small-2 columns step-box  {% if step < 5 and step >= 4 %} step-active {% endif %}">
+
+            <div class="small-2 columns step-box {% if step < 5 and step >= 4 %}step-active{% elseif step >= 5 %}step-completed{% endif %}">
                 <h4>Fordel</h4>
-                {% if step >= 4 %}
-                    <p>Fordelt {{ allocatedAssistantsCount }}/{{ totalAssistantsCount }}</p>
-                    <p></p><a href="{{ path('schooladmin_show_users_of_department', {'id': app.user.fieldOfStudy.department.id}) }}">Fordel assistenter</a></p>
-                {% else %}
-                    <p>Det er ingen assistenter å fordele</p>
+                {% if step >= 4 and step < 5 %}
+                    {% if (totalAssistantsCount == 0)==false %}
+                        <p>Fordelt {{ allocatedAssistantsCount }}/{{ totalAssistantsCount }}</p>
+                    {% endif %}
+                {% elseif step >= 5 %}
+                    <p>{{ totalAssistantsCount }} fordelt</p>
                 {% endif %}
+                <p></p><a href="{{ path('schooladmin_show_users_of_department', {'id': app.user.fieldOfStudy.department.id}) }}">Fordel assistenter</a></p>
             </div>
             <div class="small-2 columns end step-box  {% if step >= 5 %} step-active {% endif %}">
                 <h4>Drift</h4>

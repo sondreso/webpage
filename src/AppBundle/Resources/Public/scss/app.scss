@@ -472,24 +472,34 @@ ul.alternatives {
 
   .step-box{
     height:200px;
-    border:1px solid black;
-    border-radius: 10px;
+    /*border-left: 1px solid black;
+    border-left-color: $vektor-blue;*/
     text-align: center;
-    padding-top: 25px;
+    padding-top: 10px;
     p {
       margin-top: 2px;
       margin-bottom: 2px;
     }
   }
   .step-active{
-    background-color: $vektor-blue;
+    background-color: $vektor-white;
+    border: 5px solid $vektor-blue;
+
   }
 
   .step-completed{
     color: #b4b4cb;
-    h4 {
+    border-left-color: #b4b4cb;
+    h4, a {
       color: #b4b4cb;
     }
+    a:hover {
+      color: #8989a0;
+    }
+    a {
+      text-decoration: underline;
+    }
+
   }
 
   .step-progressbar{

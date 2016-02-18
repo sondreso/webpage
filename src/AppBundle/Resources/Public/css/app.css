@@ -6950,6 +6950,31 @@ ul.alternatives {
 .float-right {
   float: right; }
 
+.vertical-align-image-helper {
+  display: inline-block;
+  height: 100%;
+  vertical-align: middle; }
+
+.sponsor-img {
+  max-height: 150px;
+  vertical-align: middle; }
+
+.sponsor-column {
+  height: 150px; }
+
+.top-line {
+  width: 100%;
+  height: 20px;
+  background-color: #6FCEEE;
+  margin-bottom: 20px; }
+  .top-line p {
+    color: #b70000;
+    font-size: 14px;
+    text-align: center; }
+    .top-line p a {
+      color: #b70000;
+      text-decoration: underline; }
+
 .control-panel hr {
   padding: 10px; }
 
@@ -6967,18 +6992,28 @@ ul.alternatives {
 
 .control-panel .step-box {
   height: 200px;
-  border: 1px solid black;
-  border-radius: 10px;
+  /*border-left: 1px solid black;
+    border-left-color: $vektor-blue;*/
   text-align: center;
-  padding-top: 25px; }
+  padding-top: 10px; }
   .control-panel .step-box p {
     margin-top: 2px;
     margin-bottom: 2px; }
 
 .control-panel .step-active {
-  background-color: #6fceee; }
+  background-color: #fafeff;
+  border: 5px solid #6fceee; }
 
 .control-panel .step-completed {
-  color: #b4b4cb; }
-  .control-panel .step-completed h4 {
+  color: #b4b4cb;
+  border-left-color: #b4b4cb; }
+  .control-panel .step-completed h4, .control-panel .step-completed a {
     color: #b4b4cb; }
+  .control-panel .step-completed a:hover {
+    color: #8989a0; }
+  .control-panel .step-completed a {
+    text-decoration: underline; }
+
+.control-panel .step-progressbar {
+  height: 40px;
+  background: #6fceee; }
