@@ -54,6 +54,7 @@
                 </div>
             </div>
         </div>
+
         <div class="row">
             <div class="small-2 columns small-offset-1 step-box {% if step < 1 %}step-active{% else %}step-completed{% endif %}">
                 <h4>Nytt semester</h4>
@@ -66,10 +67,24 @@
 
             <div class="small-2 columns step-box {% if step < 3 and step >= 1 %}step-active{% elseif step >= 3 %}step-completed{% endif %}">
                 <h4>Opptak</h4>
-                {% if step >= 1 and step < 3  %}
+                {% if step >= 1 and step < 2 %}
+                    {% if time_to_admission_start < 24 %}
+                        {% if time_to_admission_start == 1 %}
+                            <p>{{ time_to_admission_start }} time til opptaket starter!!</p>
+                        {% else %}
+                            <p>{{ time_to_admission_start }} timer til opptaket starter!</p>
+                        {% endif %}
+                    {% else %}
+                        {% if time_to_admission_start // 24 == 1 %}
+                            <p>{{ time_to_admission_start // 24 }} dag til opptaket starter!</p>
+                        {% else %}
+                            <p>{{ time_to_admission_start // 24 }} dager til opptaket starter!</p>
+                        {% endif %}
+                    {% endif %}
+                {% elseif step >= 2 and step < 3  %}
                     {% if admission_time_left < 24 %}
                         {% if admission_time_left == 1 %}
-                            <p>{{ admission_time_left }} time igjen!</p>
+                            <p>{{ admission_time_left }} time igjen</p>
                         {% else %}
                             <p>{{ admission_time_left }} timer igjen</p>
                         {% endif %}
@@ -80,12 +95,11 @@
                             <p>{{ admission_time_left // 24 }} dager igjen</p>
                         {% endif %}
                     {% endif %}
+                    <p><a href="{{ path('admissionadmin_show') }}">Nye søkere</a></p>
                 {% else %}
                     <p>Opptaket er stengt</p>
+                    <p><a href="{{ path('admissionadmin_show') }}">Nye søkere</a></p>
                 {%  endif %}
-                {% set totalApplicationsCount = 10 %} <!-- FJERN DENNE!!!!-->
-                <p>Antall søkere: {{ totalApplicationsCount }}</p>
-                <p><a href="{{ path('admissionadmin_show') }}">Nye søkere</a></p>
             </div>
 
             <div class="small-2 columns step-box {% if step < 4 and step >= 3 %}step-active{% elseif step >= 4 %}step-completed{% endif %}">
