@@ -3,7 +3,7 @@
 {% block body %}
     <div class="control-panel">
         <div class="row">
-            <div class="small-2 columns small-offset-1 step-box {% if step < 1 %} step-active {% endif %}">
+            <div class="small-2 columns small-offset-1 step-box {% if step < 1 %} step-active {% else %}step-completed{% endif %}">
                 <h4>Nytt semester</h4>
                 {% if step < 1 %}
                     <p><a href="{{ path('semesteradmin_show') }}">Opprett semester</a></p>
@@ -12,7 +12,7 @@
                 {% endif %}
 
             </div>
-            <div class="small-2 columns step-box  {% if step < 3 and step >= 1 %} step-active {% endif %}">
+            <div class="small-2 columns step-box {% if step < 3 and step >= 1 %}step-active{% elseif step >= 3 %}step-completed{% endif %}">
                 <h4>Opptak</h4>
                 {% if step >= 1 and step < 3  %}
                     {% if admission_time_left < 24 %}

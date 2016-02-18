@@ -6969,7 +6969,6 @@ ul.alternatives {
   height: 200px;
   border: 1px solid black;
   border-radius: 10px;
-  margin-right: 10px;
   text-align: center;
   padding-top: 25px; }
   .control-panel .step-box p {
@@ -6978,3 +6977,8 @@ ul.alternatives {
 
 .control-panel .step-active {
   background-color: #6fceee; }
+
+.control-panel .step-completed {
+  color: #b4b4cb; }
+  .control-panel .step-completed h4 {
+    color: #b4b4cb; }

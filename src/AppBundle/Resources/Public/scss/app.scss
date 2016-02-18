@@ -442,7 +442,6 @@ ul.alternatives {
     height:200px;
     border:1px solid black;
     border-radius: 10px;
-    margin-right: 10px;
     text-align: center;
     padding-top: 25px;
     p {
@@ -452,6 +451,13 @@ ul.alternatives {
   }
   .step-active{
     background-color: $vektor-blue;
+  }
+
+  .step-completed{
+    color: #b4b4cb;
+    h4 {
+      color: #b4b4cb;
+    }
   }
 }
 
