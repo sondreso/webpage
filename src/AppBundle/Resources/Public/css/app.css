@@ -6965,10 +6965,6 @@ ul.alternatives {
 .control-panel .control-panel-item i:hover {
   color: #007095; }
 
-.control-panel .sbsStyle {
-  margin-top: 2px;
-  margin-bottom: 2px; }
-
 .control-panel .step-box {
   height: 200px;
   border: 1px solid black;
@@ -6976,6 +6972,9 @@ ul.alternatives {
   margin-right: 10px;
   text-align: center;
   padding-top: 25px; }
+  .control-panel .step-box p {
+    margin-top: 2px;
+    margin-bottom: 2px; }
 
 .control-panel .step-active {
   background-color: #6fceee; }

@@ -438,12 +438,6 @@ ul.alternatives {
     color:#007095;
   }
 
-  .sbsStyle {
-    margin-top: 2px;
-    margin-bottom: 2px;
-
-  }
-
   .step-box{
     height:200px;
     border:1px solid black;
@@ -451,6 +445,10 @@ ul.alternatives {
     margin-right: 10px;
     text-align: center;
     padding-top: 25px;
+    p {
+      margin-top: 2px;
+      margin-bottom: 2px;
+    }
   }
   .step-active{
     background-color: $vektor-blue;
