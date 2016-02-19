@@ -340,10 +340,8 @@
             if(step > 0){
                 step -= 1;
             }
-            console.log(step);
             var round_step = Math.floor(step);
             var percentage = (step-round_step)*100;
-            console.log(round_step,percentage);
             for (i = 0; i <= 5; i++) {
                 if(i>round_step) {
                     $("#step-progressbar-" + i + " > .line-container > .line > .fill").width("0");
