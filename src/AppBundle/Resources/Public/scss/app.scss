@@ -483,8 +483,8 @@ ul.alternatives {
   }
   .step-active{
     background-color: $vektor-white;
-    border: 5px solid $vektor-blue;
-
+    border: 2px solid $vektor-blue;
+    box-shadow: 10px 10px 5px 0px rgba(0,0,0,0.15);
   }
 
   .step-completed{
