@@ -3,7 +3,7 @@
 {% block body %}
     <div class="control-panel">
         <div class="row progressbar">
-            <div class="small-2 columns small-offset-1 step">
+            <div class="small-2 columns small-offset-1 step" id="step-progressbar-0">
                 <div class="ring-container">
                     <div class="outer-ring"><div class="inner-ring"></div></div>
                 </div>
@@ -13,7 +13,7 @@
                     </div>
                 </div>
             </div>
-            <div class="small-2 columns step">
+            <div class="small-2 columns step" id="step-progressbar-1">
                 <div class="ring-container">
                     <div class="outer-ring"><div class="inner-ring"></div></div>
                 </div>
@@ -23,7 +23,7 @@
                     </div>
                 </div>
             </div>
-            <div class="small-2 columns step">
+            <div class="small-2 columns step" id="step-progressbar-2">
                 <div class="ring-container">
                     <div class="outer-ring"><div class="inner-ring"></div></div>
                 </div>
@@ -33,7 +33,7 @@
                     </div>
                 </div>
             </div>
-            <div class="small-2 columns step">
+            <div class="small-2 columns step" id="step-progressbar-3">
                 <div class="ring-container">
                     <div class="outer-ring"><div class="inner-ring"></div></div>
                 </div>
@@ -43,9 +43,9 @@
                     </div>
                 </div>
             </div>
-            <div class="small-2 columns end step">
+            <div class="small-2 columns end step" id="step-progressbar-4">
                 <div class="ring-container">
-                    <div class="outer-ring no-fill"><div class="inner-ring"></div></div>
+                    <div class="outer-ring"><div class="inner-ring"></div></div>
                 </div>
                 <div class="line-container">
                     <div class="line">
@@ -314,4 +314,37 @@
             <hr/>
         </div>
     </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        $(function(){
+            var step = {{ step }};
+            if(step < 0){
+                return;
+            }
+            if(step > 0){
+                step -= 1;
+            }
+            console.log(step);
+            var round_step = Math.floor(step);
+            var percentage = (step-round_step)*100;
+            console.log(round_step,percentage);
+            for (i = 0; i <= 5; i++) {
+                if(i>round_step) {
+                    $("#step-progressbar-" + i + " > .line-container > .line > .fill").width("0");
+                }
+                else if(i<round_step){
+                    $("#step-progressbar-" + i + " > .line-container > .line > .fill").width("100%");
+                }
+                else{
+                    $("#step-progressbar-" + i + " > .line-container > .line > .fill").width(percentage + "%");
+                }
+                if(i<=round_step){
+                    $("#step-progressbar-" + i + " > .ring-container > .outer-ring").addClass("fill");
+                }
+            }
+        });
+
+    </script>
 {% endblock %}

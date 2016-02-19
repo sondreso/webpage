@@ -523,7 +523,7 @@ ul.alternatives {
           height: $step-progress-bar-ring-size;
           border: 1px solid $step-progress-bar-border-color;
           border-radius: $step-progress-bar-ring-size;
-          background-color: $vektor-blue;
+          background-color: $vektor-white;
           display: flex;
           justify-content: center;
           align-items: center;
@@ -537,8 +537,8 @@ ul.alternatives {
           }
         }
 
-        .no-fill{
-          background-color: $vektor-white;
+        .fill{
+          background-color: $vektor-blue;
         }
       }
 
@@ -548,7 +548,7 @@ ul.alternatives {
         background-color: $vektor-white;
         margin-left: -2px;
         margin-right: -2px;
-        z-index: 100;
+        z-index: 1;
         .line{
           height: $step-progress-bar-ring-width;
           width: 100%;
@@ -556,7 +556,7 @@ ul.alternatives {
           border-bottom: 1px solid $step-progress-bar-border-color;
 
           .fill{
-            width: 95%;
+            width: 0;
             height: 100%;
             background-color: $vektor-blue;
           }
