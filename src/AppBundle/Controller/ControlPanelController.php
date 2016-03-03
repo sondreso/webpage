@@ -12,6 +12,16 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 class ControlPanelController extends Controller {
 
     public function showAction(){
+		$departments = $this->getDoctrine()->getRepository('AppBundle:Department')->findAll();
+
+		// Return the view to be rendered
+		return $this->render('control_panel/index.html.twig', array(
+			'departments' => $departments,
+		));
+
+	}
+
+	public function showSBSAction(){
 		$em = $this->getDoctrine()->getManager();
 
 		$department = $this->get('security.token_storage')->getToken()->getUser()->getFieldOfStudy()->getDepartment();
@@ -33,6 +43,7 @@ class ControlPanelController extends Controller {
 		$assignedInterviewsCount = 0;
 		$allocatedAssistantsCount = 0;
 		$totalAssistantsCount = 0;
+		$totalApplicationsCount = 0;
 
 		if(!is_null($semester)){
 			$applicationRepository = $this->getDoctrine()->getRepository('AppBundle:Application');
@@ -53,22 +64,25 @@ class ControlPanelController extends Controller {
 				}
 			}
 			$step = $this->determineCurrentStep($semester, $interviewedAssistantsCount, $assignedInterviewsCount, $allocatedAssistantsCount, $totalAssistantsCount);
+
+			$totalApplicationsCount = count($this->getDoctrine()->getRepository('AppBundle:ApplicationStatistic')->findBy(array('semester' => $semester)));
 		}
 
-		$departments = $this->getDoctrine()->getRepository('AppBundle:Department')->findAll();
-
 		// Return the view to be rendered
-		return $this->render('control_panel/index.html.twig', array(
+		return $this->render('control_panel/sbs.html.twig', array(
 			'step' => $step,
 			'semester' => $semester,
 			'interviewedAssistantsCount' => $interviewedAssistantsCount,
 			'totalInterviewsCount' => $assignedInterviewsCount + $interviewedAssistantsCount,
 			'allocatedAssistantsCount' => $allocatedAssistantsCount,
 			'totalAssistantsCount' => $totalAssistantsCount,
-			'departments' => $departments,
+			'totalApplicationsCount' => $totalApplicationsCount,
+			'admissionTimeLeft' => 0,
+			'timeToAdmissionStart' => 0,
 		));
-
 	}
+
+
 
 	public function determineCurrentStep(Semester $semester, $interviewedAssistantsCount, $assignedInterviewsCount, $allocatedAssistantsCount, $totalAssistantsCount){
 
